@@ -52,10 +52,13 @@ trabalho\_ra2/
 
 - Lê `carros.bin` e armazena os dados dinamicamente em um vetor
 - Cria:
+
   - Lista encadeada de anos (`lista_de_ano`)
   - Árvore binária de kilometragens (`arvore_de_kilometragem`)
   - Árvore binária de preços (`arvore_de_preco`)
+
 - Oferece um menu com as seguintes opções:
+
   1. Exibir todos os registros
   2. Buscar por substring no modelo (ordenado por preço)
   3. Filtrar por ano mínimo
@@ -102,5 +105,4 @@ gcc -o P2 P2/main.c -Iinclude
 
 ## ✅ Observações
 
-* Certifique-se de que o `carros.csv` contenha **pelo menos 30 registros**, conforme exigido no enunciado.
 * Toda a memória alocada dinamicamente é liberada corretamente no final de cada execução.
