@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "Makefile": "code-text-binary",
+        "unistd.h": "c"
+    }
+}
