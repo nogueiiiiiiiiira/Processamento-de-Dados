@@ -1,64 +1,68 @@
 #ifndef CARRO_H
 #define CARRO_H
 
-#define MAX_MARCA 21
-#define MAX_MODELO 31
+#define TAM_MAX_MARCA 21
+#define TAM_MAX_MODELO 31
 
-// estrutura principal de carro
+// estrutura principal do carro
 typedef struct {
-    char marca[MAX_MARCA];
-    char modelo[MAX_MODELO];
+    char marca[TAM_MAX_MARCA];
+    char modelo[TAM_MAX_MODELO];
     int ano;
     int kilometragem;
     float preco;
 } Carro;
 
-// lista encadeada de carros
-typedef struct NoLista {
+// no da lista encadeada de carros
+typedef struct NoDaLista {
     Carro carro;
-    struct NoLista* prox;
-} NoLista;
+    struct NoDaLista* proximo;
+} NoDaLista;
 
-// lista encadeada de anos
-typedef struct NoAno {
+// no da lista encadeada de anos, cada ano com sua lista de carros
+typedef struct NoDoAno {
     int ano;
-    NoLista* carros_ano;
-    struct NoAno* prox;
-} NoAno;
+    NoDaLista* lista_carros_ano;
+    struct NoDoAno* proximo;
+} NoDoAno;
 
-// nó de árvore binária usado para kilometragem e preço
-typedef struct NoArvore {
-    int chaveInt;       // usado para kilometragem
-    float chaveFloat;   // usado para preço
+// no da arvore binaria para kilometragem e preco
+typedef struct NoDaArvore {
+    int chave_inteira;       // usado para kilometragem
+    float chave_decimal;     // usado para preco
     Carro* carro;
-    struct NoArvore* esq;
-    struct NoArvore* dir;
-} NoArvore;
+    struct NoDaArvore* esquerda;
+    struct NoDaArvore* direita;
+} NoDaArvore;
 
-// funções de manipulação de lista
-NoLista* inserir_fim_lista(NoLista* lista, Carro c);
-void liberar_lista(NoLista* lista);
+// funcoes para manipulacao da lista
+NoDaLista* inserir_no_fim_lista(NoDaLista* lista, Carro carro_atual);
+void liberar_lista(NoDaLista* lista);
 
-// leitura e escrita de arquivos
-NoLista* carregar_csv(const char* nome_arquivo);
-void salvar_binario(const char* nome_arquivo, NoLista* lista);
+// funcoes para leitura e escrita de arquivos
+NoDaLista* carregar_csv(const char* nome_arquivo);
+void salvar_binario(const char* nome_arquivo, NoDaLista* lista);
 Carro* carregar_binario(const char* nome_arquivo, int* tamanho);
 
-// manipulação de lista_de_ano
-NoAno* construir_lista_de_ano(Carro* carros, int tamanho);
-void liberar_lista_de_ano(NoAno* lista);
-void exibir_por_ano(NoAno* lista, int ano_minimo);
+// funcoes para manipulacao da lista de anos
+NoDoAno* construir_lista_de_anos(Carro* carros, int tamanho);
+void liberar_lista_de_anos(NoDoAno* lista);
+void exibir_por_ano(NoDoAno* lista, int ano_minimo);
 
-// manipulação de árvores
-NoArvore* inserir_km(NoArvore* raiz, int km, Carro* carro); 
-NoArvore* inserir_preco(NoArvore* raiz, float preco, Carro* carro); 
+// funcoes para manipulacao da arvore binaria
+NoDaArvore* inserir_por_km(NoDaArvore* raiz, int kilometragem, Carro* carro);
+NoDaArvore* inserir_por_preco(NoDaArvore* raiz, float preco, Carro* carro);
 
-void buscar_km_intervalo(NoArvore* raiz, int min, int max); 
-void buscar_preco_intervalo(NoArvore* raiz, float min, float max); 
-void liberar_arvore(NoArvore* raiz);
+// funcoes para busca e exibicao por intervalo
+int buscar_por_km_intervalo(NoDaArvore* raiz, int minimo, int maximo);
+int buscar_por_preco_intervalo(NoDaArvore* raiz, float minimo, float maximo);
+int buscar_por_km_intervalo_wrapper(NoDaArvore* raiz, int minimo, int maximo);
+int buscar_por_preco_intervalo_wrapper(NoDaArvore* raiz, float minimo, float maximo);
+void liberar_arvore(NoDaArvore* raiz);
 
-// busca por substring e ordenação
+// funcoes para busca por substring e exibicao
 void buscar_por_modelo(Carro* carros, int tamanho, const char* substring);
 void exibir_todos(Carro* carros, int tamanho);
+void salvar_csv(const char* nome_arquivo, Carro* carros, int tamanho);
 
 #endif
