@@ -12,29 +12,25 @@
 #define LIMPAR "clear"
 #endif
 
-// funcao para limpar o terminal
 static void limpar_terminal() {
-    system(LIMPAR); // executa o comando para limpar o terminal conforme o sistema operacional
+    system(LIMPAR); 
 }
 
-// funcao para esperar o usuario pressionar enter
 static void esperar_enter() {
-    printf("\nPressione enter para continuar..."); // mensagem para o usuario
-    getchar(); // espera o usuario pressionar enter
+    printf("\nPressione enter para continuar..."); 
+    getchar(); 
 }
 
-// funcao para delay em segundos
 static void delay(double segundos) {
 #ifdef _WIN32
-    Sleep((DWORD)(segundos * 1000)); // pausa a execucao no windows
+    Sleep((DWORD)(segundos * 1000)); 
 #else
-    usleep((useconds_t)(segundos * 1000000)); // pausa a execucao em sistemas unix
+    usleep((useconds_t)(segundos * 1000000)); 
 #endif
 }
 
-// funcao para exibir o menu de opcoes
 static void exibir_menu() {
-    limpar_terminal(); // limpa o terminal antes de mostrar o menu
+    limpar_terminal(); 
     printf("\nOpcoes:\n\n");
     printf("1 - Exibir todos os carros\n");
     printf("2 - Buscar modelo por substring e ordenar por preco\n");
@@ -45,16 +41,15 @@ static void exibir_menu() {
     printf("\nEscolha: ");
 }
 
-// funcao principal do programa p2
 int main(int argc, char* argv[]) {
-    limpar_terminal(); // limpa o terminal no inicio
+    limpar_terminal(); 
     printf("Programa P2 - Leitura de Arquivo Binario e Operacoes\n\n");
-    delay(3); // pausa para o usuario ler
-    limpar_terminal(); // limpa o terminal novamente
+    delay(3); 
+    limpar_terminal(); 
 
     if (argc != 2) {
-        fprintf(stderr, "Uso: %s <carro.bin>\n", argv[0]); // verifica argumentos
-        return EXIT_FAILURE; // sai com erro se argumentos invalidos
+        fprintf(stderr, "Uso: %s <carro.bin>\n", argv[0]);
+        return EXIT_FAILURE; 
     }
 
     printf("Carregando dados do arquivo binario: %s\n", argv[1]);
@@ -62,7 +57,7 @@ int main(int argc, char* argv[]) {
     limpar_terminal();
 
     int tamanho_vetor;
-    Carro* vetor_carros = carregar_binario(argv[1], &tamanho_vetor); // carrega dados do arquivo binario
+    Carro* vetor_carros = carregar_binario(argv[1], &tamanho_vetor);
     if (!vetor_carros) {
         fprintf(stderr, "Erro ao carregar binario.\n");
         return EXIT_FAILURE;
@@ -73,7 +68,7 @@ int main(int argc, char* argv[]) {
     limpar_terminal();
 
     printf("Construindo lista de anos...\n");
-    NoDoAno* lista_anos = construir_lista_de_anos(vetor_carros, tamanho_vetor); // cria lista de anos
+    NoDoAno* lista_anos = construir_lista_de_anos(vetor_carros, tamanho_vetor);
     delay(3);
     limpar_terminal();
 
@@ -85,8 +80,8 @@ int main(int argc, char* argv[]) {
     NoDaArvore* arvore_km = NULL;
     NoDaArvore* arvore_preco = NULL;
     for (int i = 0; i < tamanho_vetor; i++) {
-        arvore_km = inserir_por_km(arvore_km, vetor_carros[i].kilometragem, &vetor_carros[i]); // insere na arvore de km
-        arvore_preco = inserir_por_preco(arvore_preco, vetor_carros[i].preco, &vetor_carros[i]); // insere na arvore de preco
+        arvore_km = inserir_por_km(arvore_km, vetor_carros[i].kilometragem, &vetor_carros[i]);
+        arvore_preco = inserir_por_preco(arvore_preco, vetor_carros[i].preco, &vetor_carros[i]);
     }
 
     delay(3);
@@ -97,22 +92,22 @@ int main(int argc, char* argv[]) {
 
     int opcao;
     do {
-        exibir_menu(); // mostra o menu
+        exibir_menu();
 
-        if (scanf("%d", &opcao) != 1) { // le a opcao do usuario
+        if (scanf("%d", &opcao) != 1) {
             printf("Entrada invalida. Por favor, insira um numero.\n");
-            while (getchar() != '\n'); // limpa o buffer de entrada
+            while (getchar() != '\n');
             opcao = 0;
             continue;
         }
 
-        getchar(); // consome o '\n' deixado pelo scanf
+        getchar();
 
         switch (opcao) {
             case 1:
                 limpar_terminal();
-                exibir_todos(vetor_carros, tamanho_vetor); // exibe todos os carros
-                salvar_csv("carros_exportados.csv", vetor_carros, tamanho_vetor); // salva em csv
+                exibir_todos(vetor_carros, tamanho_vetor);
+                salvar_csv("carros_exportados.csv", vetor_carros, tamanho_vetor);
                 break;
 
             case 2: {
@@ -123,13 +118,13 @@ int main(int argc, char* argv[]) {
                     break;
                 }
 
-                substring[strcspn(substring, "\n")] = '\0'; // remove o '\n' do final
+                substring[strcspn(substring, "\n")] = '\0';
                 for (int i = 0; substring[i]; i++) {
-                    substring[i] = toupper((unsigned char)substring[i]); // converte para maiusculo
+                    substring[i] = toupper((unsigned char)substring[i]);
                 }
 
                 limpar_terminal();
-                buscar_por_modelo(vetor_carros, tamanho_vetor, substring); // busca e exibe resultados
+                buscar_por_modelo(vetor_carros, tamanho_vetor, substring);
                 printf("\n");
                 break;
             }
@@ -148,7 +143,7 @@ int main(int argc, char* argv[]) {
                 } while (ano_minimo < 0);
 
                 limpar_terminal();
-                exibir_por_ano(lista_anos, ano_minimo); // exibe carros filtrados por ano
+                exibir_por_ano(lista_anos, ano_minimo);
                 printf("\n");
                 break;
             }
@@ -170,7 +165,7 @@ int main(int argc, char* argv[]) {
                 } while (km_minimo < 0 || km_maximo < 0);
 
                 limpar_terminal();
-                buscar_por_km_intervalo_wrapper(arvore_km, km_minimo, km_maximo); // busca e exibe por km
+                buscar_por_km_intervalo_wrapper(arvore_km, km_minimo, km_maximo);
                 printf("\n");
                 break;
             }
@@ -192,7 +187,7 @@ int main(int argc, char* argv[]) {
                 } while (preco_minimo < 0 || preco_maximo < 0);
 
                 limpar_terminal();
-                buscar_por_preco_intervalo_wrapper(arvore_preco, preco_minimo, preco_maximo); // busca e exibe por preco
+                buscar_por_preco_intervalo_wrapper(arvore_preco, preco_minimo, preco_maximo);
                 printf("\n");
                 break;
             }
@@ -207,14 +202,14 @@ int main(int argc, char* argv[]) {
                 break;
         }
 
-        esperar_enter(); // espera o usuario antes de continuar
+        esperar_enter();
 
     } while (opcao != 6);
 
-    liberar_lista_de_anos(lista_anos); // libera memoria da lista de anos
-    liberar_arvore(arvore_km); // libera memoria da arvore de km
-    liberar_arvore(arvore_preco); // libera memoria da arvore de preco
-    free(vetor_carros); // libera vetor de carros
+    liberar_lista_de_anos(lista_anos);
+    liberar_arvore(arvore_km);
+    liberar_arvore(arvore_preco);
+    free(vetor_carros);
 
-    return EXIT_SUCCESS; // encerra o programa com sucesso
+    return EXIT_SUCCESS;
 }

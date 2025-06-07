@@ -10,63 +10,56 @@
 #define CLEAR "clear" 
 #endif
 
-// funcao para limpar o terminal
 static void limpar_terminal() {
-    system(CLEAR); // executa o comando de limpeza do terminal conforme o sistema operacional
+    system(CLEAR); 
 }
 
-// funcao para dar uma pausa para o usuario ler
 static void esperar_enter() {
-    printf("\nPressione enter para continuar..."); // mensagem para o usuario
-    getchar(); // espera o usuario pressionar enter
+    printf("\nPressione enter para continuar..."); 
+    getchar(); 
 }
 
-// funcao para delay em segundos
 static void delay(double segundos) {
 #ifdef _WIN32
-    Sleep((DWORD)(segundos * 1000)); // pausa a execucao no windows
+    Sleep((DWORD)(segundos * 1000)); 
 #else
-    usleep((useconds_t)(segundos * 1000000)); // pausa a execucao em sistemas unix
+    usleep((useconds_t)(segundos * 1000000)); 
 #endif
 }
 
-// funcao principal p1
 int main(int argc, char* argv[]) {
-    limpar_terminal(); // limpa o terminal no inicio da execucao
+    limpar_terminal(); 
     printf("Programa P1 - Leitura de CSV e Gravacao em Arquivo Binario\n\n");
-    delay(3); // pausa para o usuario ler
-    limpar_terminal(); // limpa o terminal novamente
+    delay(3); 
+    limpar_terminal(); 
 
     if (argc != 3) {
-        // verifica se o numero de argumentos esta correto
         fprintf(stderr, "Uso: %s <carro.csv> <carro.bin>\n", argv[0]);
-        return EXIT_FAILURE; // encerra com erro se estiver incorreto
+        return EXIT_FAILURE; 
     }
 
-    const char* nome_arquivo_csv = argv[1]; // nome do arquivo csv passado por argumento
-    const char* nome_arquivo_binario = argv[2]; // nome do arquivo binario passado por argumento
+    const char* nome_arquivo_csv = argv[1]; 
+    const char* nome_arquivo_binario = argv[2]; 
 
     printf("Abrindo arquivo CSV: %s\n", nome_arquivo_csv);
     delay(3);
     limpar_terminal();
 
-    FILE *arquivo_teste = fopen(nome_arquivo_csv, "r"); // tenta abrir o arquivo csv
+    FILE *arquivo_teste = fopen(nome_arquivo_csv, "r"); 
     if (!arquivo_teste) {
-        // se nao conseguir abrir, imprime erro e encerra
         perror("Erro abrindo arquivo CSV");
         fprintf(stderr, "Erro ao carregar dados de %s\n", nome_arquivo_csv);
         return EXIT_FAILURE;
     }
 
-    fclose(arquivo_teste); // fecha o arquivo de teste de abertura
+    fclose(arquivo_teste); 
 
     printf("Carregando dados do CSV...\n");
     delay(3);
     limpar_terminal();
 
-    NoDaLista* lista_carros = carregar_csv(nome_arquivo_csv); // carrega os dados do csv em uma lista encadeada
+    NoDaLista* lista_carros = carregar_csv(nome_arquivo_csv); 
     if (!lista_carros) {
-        // se houver erro na carga, imprime e encerra
         perror("Erro ao carregar dados");
         fprintf(stderr, "Erro ao carregar dados de %s\n", nome_arquivo_csv);
         return EXIT_FAILURE;
@@ -79,16 +72,16 @@ int main(int argc, char* argv[]) {
     printf("Salvando dados no arquivo binario: %s\n", nome_arquivo_binario);
     delay(3);
     limpar_terminal();
-    salvar_binario(nome_arquivo_binario, lista_carros); // salva a lista encadeada no arquivo binario
+    salvar_binario(nome_arquivo_binario, lista_carros); 
 
     printf("Dados salvos em %s com sucesso.\n", nome_arquivo_binario);
     delay(3);
     limpar_terminal();
 
-    liberar_lista(lista_carros); // libera a memoria ocupada pela lista
+    liberar_lista(lista_carros); 
     printf("Memoria liberada.\n");
 
-    esperar_enter(); // espera o usuario pressionar enter antes de encerrar
+    esperar_enter(); 
 
-    return EXIT_SUCCESS; // encerra com sucesso
+    return EXIT_SUCCESS; 
 }

@@ -116,6 +116,3 @@ data/carros_exportados.csv
 ```
 
 Esse arquivo CSV contém os modelos encontrados, permitindo reutilização ou análise externa dos dados.
-
-```
-
